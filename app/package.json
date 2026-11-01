@@ -1,0 +1,24 @@
+{
+  "name": "locksmith-app",
+  "private": true,
+  "version": "0.1.0",
+  "type": "module",
+  "scripts": {
+    "prebuild:data": "node ../scripts/build-data.mjs",
+    "dev": "node ../scripts/build-data.mjs && vite",
+    "build": "node ../scripts/build-data.mjs && tsc --noEmit && vite build",
+    "preview": "vite preview",
+    "validate": "node ../scripts/validate.mjs"
+  },
+  "dependencies": {
+    "fuse.js": "^7.5.0",
+    "preact": "^11.1.1"
+  },
+  "devDependencies": {
+    "@preact/preset-vite": "^2.10.6",
+    "ajv": "^8.20.0",
+    "typescript": "^7.0.2",
+    "vite": "^8.3.5",
+    "vite-plugin-pwa": "^2.0.0"
+  }
+}

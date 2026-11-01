@@ -6,7 +6,7 @@
     {"id": "xtool_x100pad", "marque": "XTool", "modele": "X100 PAD", "role": "diagnostic_programmation", "version_logiciel": null},
     {"id": "xhorse_vvdi_mini_key_tool", "marque": "Xhorse", "modele": "VVDI Mini Key Tool", "role": "generation_cle_telecommande", "version_logiciel": null},
     {"id": "keydiy_kd_x2", "marque": "KEYDIY", "modele": "KD-X2", "role": "generation_telecommande", "version_logiciel": null},
-    {"id": "xhorse_panda", "marque": "Xhorse", "modele": "Panda (à confirmer)", "role": "taillage_lames", "version_logiciel": null},
+    {"id": "xhorse_panda", "marque": "Xhorse", "modele": "Panda (machine de taillage)", "role": "taillage_lames", "version_logiciel": null},
     {"id": "lishi", "marque": "Lishi", "modele": "outils de lecture/décodage de serrure (VW notamment)", "role": "decodage_serrure", "version_logiciel": null}
   ],
   "cles_utilisees": ["xhorse_smart_key", "xhorse_lame_plate", "autel_smart_key", "keydiy"]

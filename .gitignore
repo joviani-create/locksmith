@@ -29,3 +29,8 @@ tmp/
 *.swp
 .DS_Store
 Thumbs.db
+
+# App (fichiers générés)
+app/dist/
+app/dev-dist/
+app/src/data/
