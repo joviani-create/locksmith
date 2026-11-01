@@ -1,0 +1,46 @@
+{
+  "id": "hyundai_elantra_2020",
+  "marque": "Hyundai",
+  "modele": "Elantra",
+  "annees": {"debut": 2020, "fin": 2020},
+  "marche": "USA",
+  "zone_risque": "orange",
+  "motif_risque": "Squelette : zone de risque à renseigner par l'équipe. La procédure efface toutes les clés existantes.",
+  "systeme_immo": {"type": "smart/proximité", "puce": "8A (smart card)", "frequence_mhz": null, "profil_lame": null, "fiabilite": "a_verifier"},
+  "cles_compatibles": [],
+  "fiabilite_globale": "a_verifier",
+  "procedures": [{
+    "scenario": "all_keys_lost",
+    "outil": "autel_im508",
+    "accessoires": [],
+    "prerequis": [
+      "Alimentation stabilisée branchée",
+      "Vérifier la propriété du véhicule (carte grise / pièce d'identité)",
+      "Outil branché à la prise OBD",
+      "Feux de détresse allumés, contact coupé (tableau de bord noir)",
+      "Ouvrir puis fermer une fois la porte conducteur"
+    ],
+    "etapes": [
+      "Partie 1 – Lire le PIN : IMMO > Auto VIN > OK > USA > Oui > Smart key > Control unit > Read immobilizer password > Read pin code (8A smart card).",
+      "Confirmer que le type de clé est correct (fonction limitée aux smart cards puce 8A), refaire les prérequis (feux de détresse, contact coupé, porte), puis attendre : la lecture est longue.",
+      "Noter le code PIN à 6 chiffres affiché.",
+      "Partie 2 – Apprendre la clé : Keyless system > Remote control learning > Smart key learning > Oui (la fonction efface toutes les clés existantes : les anciennes devront être réappris).",
+      "Refaire les prérequis, puis saisir le code de sécurité à 6 chiffres.",
+      "Cliquer OK, puis dans les 5 s approcher le dos ou le dessus de la clé smart et maintenir START 5 s jusqu'au clignotement des voyants antivol.",
+      "En cas d'échec, retirer le boîtier de la clé et recommencer pour programmer la puce de la clé.",
+      "Attendre « Programming succeed », répondre Non, vérifier « Number of current keys », sortir au menu véhicule et tester la clé."
+    ],
+    "risques": [
+      "Efface toutes les clés existantes : prévoir de réapprendre chaque clé.",
+      "Testé sur Autel IM608 II seulement (pas sur IM508) ; page sans date ni version de logiciel.",
+      "Véhicule USA, système 2019 : à confirmer avant de l'appliquer à un autre marché."
+    ],
+    "duree_attente_min": null,
+    "version_logiciel": null,
+    "fiabilite": "a_verifier",
+    "source": "Tutoriel revendeur (source unique, non daté) : https://www.autelshop.de/service/autel-im608-ii-program-2020-hyundai-elantra-all-keys-lost.html"
+  }],
+  "notes_terrain": [
+    "À VÉRIFIER : source unique, tutoriel d'un revendeur Autel annonçant un succès. Aucun retour indépendant trouvé."
+  ]
+}

@@ -2,27 +2,46 @@
   "id": "kia_sportage_2011_2013",
   "marque": "Kia",
   "modele": "Sportage",
-  "annees": {"debut": 2011, "fin": 2013},
+  "annees": {
+    "debut": 2011,
+    "fin": 2013
+  },
   "marche": "INCONNU",
   "zone_risque": "orange",
   "motif_risque": "Squelette : zone de risque à renseigner par l'équipe.",
-  "systeme_immo": {"type": null, "puce": null, "frequence_mhz": null, "profil_lame": null, "fiabilite": "a_verifier"},
+  "systeme_immo": {
+    "type": null,
+    "puce": null,
+    "frequence_mhz": null,
+    "profil_lame": null,
+    "fiabilite": "a_verifier"
+  },
   "cles_compatibles": [],
   "fiabilite_globale": "a_verifier",
-  "procedures": [{
-    "scenario": "cle_ajoutee",
-    "outil": "autel_im508",
-    "accessoires": [],
-    "prerequis": ["Alimentation stabilisée branchée", "Vérifier la propriété du véhicule (carte grise / pièce d'identité)"],
-    "etapes": ["À compléter avec un retour terrain réel"],
-    "risques": ["À compléter"],
-    "duree_attente_min": null,
-    "version_logiciel": null,
-    "fiabilite": "a_verifier",
-    "source": null
-  }],
+  "procedures": [
+    {
+      "scenario": "cle_ajoutee",
+      "outil": "autel_im508",
+      "accessoires": [],
+      "prerequis": [
+        "Alimentation stabilisée branchée",
+        "Vérifier la propriété du véhicule (carte grise / pièce d'identité)"
+      ],
+      "etapes": [
+        "À compléter avec un retour terrain réel"
+      ],
+      "risques": [
+        "À compléter"
+      ],
+      "duree_attente_min": null,
+      "version_logiciel": null,
+      "fiabilite": "a_verifier",
+      "source": null
+    }
+  ],
   "notes_terrain": [
     "À VÉRIFIER : liste Xhorse KeylessGo V201 (2019-7-22) : Kia Sportage 2011-2013, télécommande intelligente, nécessite VVDI smart remote. Source unique : https://www.xhorsevvdi.com/service/xhorse-universal-smart-key-support-list-2086.html",
-    "Marché, puce, fréquence, lame et procédure Autel : non renseignés."
+    "Marché, puce, fréquence, lame et procédure Autel : non renseignés.",
+    "À VÉRIFIER (extraits de recherche, pages non ouvertes, sources contradictoires) : un guide revendeur cite une Sportage 2017 ID46 en All Keys Lost avec Autel KM100 (http://blog.autelshop.de/autel-km100-program-2017-kia-sportage-id46-all-keys-lost/) ; un autre guide dit que les Sportage d'avant 2022 ne supportent pas l'All Keys Lost par OBD (https://carinterior.alibaba.com/question/autel-km100-all-keys-lost-full-guide). Ces sources ne portent pas sur 2011-2013."
   ]
 }
