@@ -1,0 +1,52 @@
+{
+  "id": "hyundai_i10_2014_2016",
+  "marque": "Hyundai",
+  "modele": "i10 (IA)",
+  "annees": {"debut": 2014, "fin": 2016},
+  "marche": "INCONNU",
+  "zone_risque": "orange",
+  "motif_risque": "Squelette : zone de risque à renseigner par l'équipe.",
+  "systeme_immo": {"type": "transpondeur", "puce": "46", "frequence_mhz": null, "profil_lame": null, "fiabilite": "a_verifier"},
+  "cles_compatibles": [],
+  "fiabilite_globale": "a_verifier",
+  "procedures": [{
+    "scenario": "all_keys_lost",
+    "outil": "autel_im508",
+    "accessoires": [],
+    "prerequis": [
+      "Alimentation stabilisée branchée",
+      "Vérifier la propriété du véhicule (carte grise / pièce d'identité)",
+      "Clé à lame avec puce 46 (la fonction ne couvre que ce type)"
+    ],
+    "etapes": [
+      "Lancer Immo Status Scan et attendre l'affichage de l'état.",
+      "Choisir Read Pincode > Read Immobilizer Password (46 Blade Key) > Read Pincode by OBD.",
+      "Confirmer que le type de clé est correct.",
+      "Attendre : la lecture du mot de passe est longue.",
+      "Noter le PIN à 6 chiffres. Cette page décrit la lecture du PIN seulement, pas l'apprentissage de la clé."
+    ],
+    "risques": [
+      "La fonction ne lit le PIN que sur certains modèles à puce 46 : à vérifier sur la tablette avant d'en dépendre.",
+      "Durée d'attente, version du logiciel et suite (apprentissage de la clé) non indiquées."
+    ],
+    "duree_attente_min": null,
+    "version_logiciel": null,
+    "fiabilite": "a_verifier",
+    "source": "UOBDII, 2021-01-18 : https://blog.uobdii.com/autel-im608-im508-pincode-reading-hyundai-i10-id46-akl/"
+  }],
+  "retours": [
+    {
+      "lien": "https://blog.uobdii.com/autel-im608-im508-pincode-reading-hyundai-i10-id46-akl/",
+      "date": "2021-01-18",
+      "outil": "autel_im508",
+      "version_logiciel": null,
+      "scenario": "all_keys_lost",
+      "resultat": "reussi",
+      "piege": "Lecture du PIN seulement, sur puce 46 à lame ; blog de revendeur, pas un retour indépendant.",
+      "fiabilite": "a_verifier"
+    }
+  ],
+  "notes_terrain": [
+    "À VÉRIFIER : source unique, blog de revendeur Autel (IM608 ou IM508)."
+  ]
+}

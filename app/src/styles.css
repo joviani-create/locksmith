@@ -46,3 +46,10 @@ ul.plain { padding-left: 20px; margin: 6px 0; }
 .risque { background: color-mix(in srgb, var(--rouge) 14%, transparent); border-left: 4px solid var(--rouge); padding: 8px 12px; border-radius: 8px; margin: 8px 0; }
 h2 { font-size: 16px; margin: 18px 0 6px; color: var(--muted); text-transform: uppercase; letter-spacing: .04em; }
 .empty { text-align: center; color: var(--muted); padding: 30px 0; }
+
+.verdict { border-radius: 12px; padding: 12px 14px; margin: 10px 0; border: 2px solid var(--line); }
+.verdict b { font-size: 18px; }
+.verdict.faisable { border-color: var(--vert); } .verdict.reserves { border-color: var(--orange); }
+.verdict.deconseille { border-color: var(--rouge); } .verdict.inconnu { border-style: dashed; }
+.retour { border-top: 1px solid var(--line); padding: 8px 0; }
+.retour:first-of-type { border-top: 0; }

@@ -2,9 +2,9 @@ import { useEffect, useMemo, useState } from 'preact/hooks';
 import Fuse from 'fuse.js';
 import fichesData from './data/fiches.json';
 import outilsData from './data/outils.json';
-import type { Fiche, Intervention, Outil, Procedure } from './types';
-import { LABEL_FIABILITE, LABEL_SCENARIO, LABEL_ZONE } from './types';
-import { pushRecent, toggle, useFavoris, useJournal, useRecents } from './store';
+import type { Fiche, Intervention, Outil, Procedure, ProcedureUtilisateur } from './types';
+import { LABEL_FIABILITE, LABEL_RESULTAT, LABEL_SCENARIO, LABEL_VERDICT, LABEL_ZONE, calculerVerdict } from './types';
+import { pushRecent, toggle, useFavoris, useJournal, useMesProcedures, useRecents } from './store';
 
 const FICHES = fichesData as unknown as Fiche[];
 const OUTILS = (outilsData as { outils: Outil[] }).outils;
@@ -14,6 +14,7 @@ const outilNom = (id: string) => {
 };
 const titre = (f: Fiche) => `${f.marque} ${f.modele}`;
 const annees = (f: Fiche) => `${f.annees.debut}–${f.annees.fin ?? 'auj.'}`;
+const uid = () => Date.now().toString(36) + Math.random().toString(36).slice(2, 6);
 const estExemple = (f: Fiche) => f.id.startsWith('exemple_');
 
 function useHash() {
@@ -120,16 +121,60 @@ function Checklist({ fiche, proc }: { fiche: Fiche; proc: Procedure }) {
   );
 }
 
+function ProcedureForm({ ficheId, defaut, onFini }: {
+  ficheId: string; defaut?: Procedure; onFini: (p: ProcedureUtilisateur | null) => void;
+}) {
+  const [v, setV] = useState({
+    scenario: (defaut?.scenario ?? 'cle_ajoutee') as Procedure['scenario'],
+    outil: defaut?.outil ?? OUTILS[0]?.id ?? '',
+    etapes: '', pieges: '', duree: '', version: '',
+  });
+  const set = (k: keyof typeof v) => (e: Event) => setV({ ...v, [k]: (e.target as HTMLInputElement).value });
+  const etapes = v.etapes.split('\n').map((x) => x.trim()).filter(Boolean);
+  return (
+    <div class="card">
+      <h2 style="margin-top:0">Ma procédure</h2>
+      <label>Outil</label>
+      <select value={v.outil} onChange={set('outil')}>
+        {OUTILS.map((o) => <option value={o.id}>{o.marque} {o.modele}</option>)}
+      </select>
+      <label>Scénario</label>
+      <select value={v.scenario} onChange={set('scenario')}>
+        {Object.entries(LABEL_SCENARIO).map(([k, l]) => <option value={k}>{l}</option>)}
+      </select>
+      <label>Étapes (une par ligne)</label>
+      <textarea rows={8} value={v.etapes} onInput={set('etapes')} placeholder={'Menu > ...\nLire le PIN\n...'} />
+      <label>Pièges, risques, accessoires nécessaires</label>
+      <textarea value={v.pieges} onInput={set('pieges')} />
+      <label>Attente (minutes, facultatif)</label>
+      <input type="number" inputMode="numeric" value={v.duree} onInput={set('duree')} />
+      <label>Version du logiciel (facultatif)</label>
+      <input value={v.version} onInput={set('version')} />
+      <div style="height:12px" />
+      <button class="btn" disabled={etapes.length === 0}
+        onClick={() => onFini({
+          id: uid(), date: new Date().toISOString(), ficheId, scenario: v.scenario, outil: v.outil, etapes,
+          pieges: v.pieges.trim(), duree_attente_min: v.duree ? Number(v.duree) : null, version_logiciel: v.version.trim(),
+        })}>Enregistrer</button>
+      <button class="btn sec" style="margin-top:8px" onClick={() => onFini(null)}>Annuler</button>
+    </div>
+  );
+}
+
 function FicheView({ id }: { id: string }) {
   const f = FICHES.find((x) => x.id === id);
   const [favoris, setFavoris] = useFavoris();
   const [recents, setRecents] = useRecents();
   const [scn, setScn] = useState(0);
   const [mode, setMode] = useState<'infos' | 'checklist'>('infos');
+  const [mes, setMes] = useMesProcedures();
+  const [ajout, setAjout] = useState(false);
   useEffect(() => { if (f) setRecents(pushRecent(recents, f.id)); /* eslint-disable-next-line */ }, [id]);
   if (!f) return <main><div class="empty">Fiche introuvable.</div></main>;
   const proc = f.procedures[scn] ?? f.procedures[0];
   const s = f.systeme_immo;
+  const { verdict, resume } = calculerVerdict(f.retours);
+  const miennes = mes.filter((m) => m.ficheId === f.id);
   return (
     <main>
       <div class="row">
@@ -142,6 +187,42 @@ function FicheView({ id }: { id: string }) {
       {f.zone_risque === 'rouge' && <div class="banner rouge">⛔ HORS PÉRIMÈTRE — {f.motif_risque || 'Ne pas intervenir sans validation du responsable.'}</div>}
       {f.zone_risque === 'orange' && <div class="banner orange">⚠ PRUDENCE — {f.motif_risque || 'Risque modéré.'}</div>}
       <div class="row"><Badge f={f.fiabilite_globale} /></div>
+
+      <div class={`verdict ${verdict}`}>
+        <div><b>{LABEL_VERDICT[verdict]}</b></div>
+        <div class="s" style="color:var(--muted);font-size:13px">{resume} · d'après des retours de locksmiths, à croiser avec votre jugement.</div>
+      </div>
+      {(f.retours?.length ?? 0) > 0 && (
+        <div class="card">
+          <h2 style="margin-top:0">Retours de locksmiths</h2>
+          {f.retours!.map((r, i) => (
+            <div class="retour" key={i}>
+              <b>{LABEL_RESULTAT[r.resultat]}</b>
+              {r.scenario ? ` · ${LABEL_SCENARIO[r.scenario]}` : ''}{r.outil ? ` · ${outilNom(r.outil)}` : ''}
+              {r.version_logiciel ? ` · logiciel ${r.version_logiciel}` : ''} · {r.date}
+              {r.piege && <div class="risque">⚠ {r.piege}</div>}
+              <div class="s" style="font-size:13px"><a href={r.lien} target="_blank" rel="noopener noreferrer">Source</a></div>
+            </div>
+          ))}
+        </div>
+      )}
+
+      {miennes.map((m) => (
+        <div class="card" key={m.id}>
+          <div class="row"><b class="grow">Ma procédure · {outilNom(m.outil)} · {LABEL_SCENARIO[m.scenario]}</b>
+            <span class="badge verifie_terrain">Vérifié terrain</span></div>
+          {m.duree_attente_min ? <div>⏱ Attente : {m.duree_attente_min} min</div> : null}
+          {m.pieges && <div class="risque" style="white-space:pre-wrap">⚠ {m.pieges}</div>}
+          <Checklist fiche={{ ...f, id: `${f.id}_${m.id}` }} proc={{ scenario: m.scenario, outil: m.outil, etapes: m.etapes, fiabilite: 'verifie_terrain' }} />
+          <div class="s" style="color:var(--muted);font-size:13px">
+            Saisie le {new Date(m.date).toLocaleDateString('fr-FR')}{m.version_logiciel ? ` · logiciel ${m.version_logiciel}` : ''}</div>
+          <button class="btn sec" style="min-height:44px;margin-top:8px"
+            onClick={() => confirm('Supprimer cette procédure ?') && setMes(mes.filter((x) => x.id !== m.id))}>Supprimer</button>
+        </div>
+      ))}
+      {ajout
+        ? <ProcedureForm ficheId={f.id} defaut={proc} onFini={(p) => { if (p) setMes([p, ...mes]); setAjout(false); }} />
+        : <button class="btn" onClick={() => setAjout(true)}>+ Ajouter ma procédure</button>}
 
       <div class="card">
         <h2 style="margin-top:0">Système</h2>
@@ -188,8 +269,6 @@ function FicheView({ id }: { id: string }) {
   );
 }
 
-const uid = () => Date.now().toString(36) + Math.random().toString(36).slice(2, 6);
-
 function JournalNouveau({ query }: { query: string }) {
   const ficheId = new URLSearchParams(query).get('fiche');
   const f = FICHES.find((x) => x.id === ficheId) ?? null;
@@ -232,6 +311,26 @@ function Journal() {
     a.click();
     URL.revokeObjectURL(a.href);
   };
+  const [mes, setMes] = useMesProcedures();
+  const exporterProcs = () => {
+    const blob = new Blob([JSON.stringify(mes, null, 2)], { type: 'application/json' });
+    const a = document.createElement('a');
+    a.href = URL.createObjectURL(blob);
+    a.download = `mes-procedures-locksmith-${new Date().toISOString().slice(0, 10)}.json`;
+    a.click();
+    URL.revokeObjectURL(a.href);
+  };
+  const importerProcs = (e: Event) => {
+    const file = (e.target as HTMLInputElement).files?.[0];
+    if (!file) return;
+    file.text().then((t) => {
+      try {
+        const data = JSON.parse(t) as ProcedureUtilisateur[];
+        const ids = new Set(mes.map((m) => m.id));
+        setMes([...mes, ...data.filter((d) => d.id && d.ficheId && Array.isArray(d.etapes) && !ids.has(d.id))]);
+      } catch { alert('Fichier invalide'); }
+    });
+  };
   const importer = (e: Event) => {
     const file = (e.target as HTMLInputElement).files?.[0];
     if (!file) return;
@@ -264,6 +363,10 @@ function Journal() {
       <button class="btn sec" onClick={exporter} disabled={!journal.length}>Exporter (JSON)</button>
       <label>Importer un journal</label>
       <input type="file" accept="application/json" onChange={importer} />
+      <h2>Mes procédures ({mes.length})</h2>
+      <button class="btn sec" onClick={exporterProcs} disabled={!mes.length}>Exporter mes procédures (JSON)</button>
+      <label>Importer des procédures</label>
+      <input type="file" accept="application/json" onChange={importerProcs} />
     </main>
   );
 }
