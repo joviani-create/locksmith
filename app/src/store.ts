@@ -1,5 +1,5 @@
 import { useState } from 'preact/hooks';
-import type { Intervention } from './types';
+import type { Intervention, ProcedureUtilisateur } from './types';
 
 function read<T>(key: string, fallback: T): T {
   try { const v = localStorage.getItem(key); return v ? (JSON.parse(v) as T) : fallback; } catch { return fallback; }
@@ -17,6 +17,7 @@ export function usePersisted<T>(key: string, initial: T) {
 
 export const useFavoris = () => usePersisted<string[]>('ls_favoris', []);
 export const useRecents = () => usePersisted<string[]>('ls_recents', []);
+export const useMesProcedures = () => usePersisted<ProcedureUtilisateur[]>('ls_mes_procedures', []);
 export const useJournal = () => usePersisted<Intervention[]>('ls_journal', []);
 
 export function pushRecent(list: string[], id: string): string[] {
