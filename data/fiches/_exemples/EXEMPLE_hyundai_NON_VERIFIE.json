@@ -1,0 +1,25 @@
+{
+  "id": "exemple_hyundai_modele_x",
+  "marque": "Hyundai",
+  "modele": "EXEMPLE (modèle fictif de démonstration)",
+  "annees": {"debut": 2015, "fin": null},
+  "marche": "INCONNU",
+  "zone_risque": "orange",
+  "motif_risque": "Exemple : zone de risque à renseigner par l'équipe.",
+  "systeme_immo": {"type": null, "puce": null, "frequence_mhz": null, "profil_lame": null, "fiabilite": "a_verifier"},
+  "cles_compatibles": [{"fabricant": "xhorse", "reference": null, "type": "lame_plate", "fiabilite": "a_verifier"}],
+  "fiabilite_globale": "a_verifier",
+  "procedures": [{
+    "scenario": "cle_ajoutee",
+    "outil": "autel_im508",
+    "accessoires": [],
+    "prerequis": ["Alimentation stabilisée branchée", "Vérifier la propriété du véhicule"],
+    "etapes": ["À compléter avec un retour terrain réel"],
+    "risques": ["À compléter"],
+    "duree_attente_min": null,
+    "version_logiciel": null,
+    "fiabilite": "a_verifier",
+    "source": null
+  }],
+  "notes_terrain": []
+}

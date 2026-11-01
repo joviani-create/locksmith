@@ -1,0 +1,54 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "title": "Fiche véhicule — locksmith",
+  "type": "object",
+  "required": ["id", "marque", "modele", "annees", "marche", "zone_risque", "fiabilite_globale", "procedures"],
+  "properties": {
+    "id": {"type": "string", "pattern": "^[a-z0-9_]+$", "description": "ex: hyundai_accent_2011_2017_eu"},
+    "marque": {"type": "string"},
+    "modele": {"type": "string"},
+    "annees": {"type": "object", "required": ["debut"], "properties": {"debut": {"type": "integer"}, "fin": {"type": ["integer", "null"]}}},
+    "marche": {"type": "string", "enum": ["EU", "JDM", "ASIE", "USA", "AFRIQUE", "MAURICE_REUNION", "INCONNU"]},
+    "zone_risque": {"type": "string", "enum": ["vert", "orange", "rouge"], "description": "vert = routine ; orange = prudence ; rouge = hors périmètre de l'équipe (risque de BCM/ECU, clés perdues…)"},
+    "motif_risque": {"type": ["string", "null"]},
+    "systeme_immo": {
+      "type": "object",
+      "properties": {
+        "type": {"type": ["string", "null"], "description": "transpondeur, CAN, smart/proximité…"},
+        "puce": {"type": ["string", "null"]},
+        "frequence_mhz": {"type": ["number", "null"]},
+        "profil_lame": {"type": ["string", "null"]},
+        "fiabilite": {"$ref": "#/$defs/fiabilite"}
+      }
+    },
+    "cles_compatibles": {
+      "type": "array",
+      "items": {"type": "object", "required": ["fabricant", "fiabilite"], "properties": {
+        "fabricant": {"enum": ["xhorse", "autel", "keydiy", "oem", "autre"]},
+        "reference": {"type": ["string", "null"]},
+        "type": {"enum": ["lame_plate", "telecommande", "flip", "smart"]},
+        "fiabilite": {"$ref": "#/$defs/fiabilite"}
+      }}
+    },
+    "fiabilite_globale": {"$ref": "#/$defs/fiabilite"},
+    "procedures": {
+      "type": "array",
+      "items": {"type": "object", "required": ["scenario", "outil", "etapes", "fiabilite"], "properties": {
+        "scenario": {"enum": ["cle_ajoutee", "all_keys_lost", "copie_telecommande"]},
+        "outil": {"type": "string", "description": "id dans data/reference/outils.json"},
+        "accessoires": {"type": "array", "items": {"type": "string"}},
+        "prerequis": {"type": "array", "items": {"type": "string"}},
+        "etapes": {"type": "array", "items": {"type": "string"}},
+        "risques": {"type": "array", "items": {"type": "string"}},
+        "duree_attente_min": {"type": ["integer", "null"]},
+        "version_logiciel": {"type": ["string", "null"]},
+        "fiabilite": {"$ref": "#/$defs/fiabilite"},
+        "source": {"type": ["string", "null"], "description": "ex: retour terrain 2026-11-03 ; vidéo YouTube <lien> ; manuel outil"}
+      }}
+    },
+    "notes_terrain": {"type": "array", "items": {"type": "string"}}
+  },
+  "$defs": {
+    "fiabilite": {"enum": ["verifie_terrain", "source_constructeur_outil", "source_communautaire", "a_verifier"]}
+  }
+}

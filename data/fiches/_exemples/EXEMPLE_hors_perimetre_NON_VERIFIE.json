@@ -1,0 +1,19 @@
+{
+  "id": "exemple_hors_perimetre",
+  "marque": "EXEMPLE",
+  "modele": "Véhicule classé rouge (démonstration)",
+  "annees": {"debut": 2020, "fin": null},
+  "marche": "EU",
+  "zone_risque": "rouge",
+  "motif_risque": "Exemple : l'équipe ne programme pas ce type de véhicule (risque de blocage BCM/ECU).",
+  "systeme_immo": {"type": null, "puce": null, "frequence_mhz": null, "profil_lame": null, "fiabilite": "a_verifier"},
+  "cles_compatibles": [],
+  "fiabilite_globale": "a_verifier",
+  "procedures": [{
+    "scenario": "all_keys_lost",
+    "outil": "autel_im508",
+    "etapes": ["Hors périmètre : ne pas intervenir sans validation du responsable"],
+    "fiabilite": "a_verifier"
+  }],
+  "notes_terrain": ["Sert à tester l'affichage du bandeau ROUGE dans l'application."]
+}
