@@ -1,0 +1,31 @@
+# Dépendances
+node_modules/
+vendor/
+__pycache__/
+*.pyc
+.venv/
+venv/
+
+# Build
+dist/
+build/
+*.egg-info/
+
+# Environnement et secrets
+.env
+.env.*
+!.env.example
+*.pem
+*.key
+
+# Logs et fichiers temporaires
+*.log
+tmp/
+*.tmp
+
+# Éditeurs et système
+.idea/
+.vscode/
+*.swp
+.DS_Store
+Thumbs.db
