@@ -1,0 +1,29 @@
+{
+  "id": "hyundai_elantra_2016_2017",
+  "marque": "Hyundai",
+  "modele": "Elantra",
+  "annees": {"debut": 2016, "fin": 2017},
+  "marche": "INCONNU",
+  "zone_risque": "orange",
+  "motif_risque": "Squelette : zone de risque à renseigner par l'équipe.",
+  "systeme_immo": {"type": null, "puce": null, "frequence_mhz": null, "profil_lame": null, "fiabilite": "a_verifier"},
+  "cles_compatibles": [],
+  "fiabilite_globale": "a_verifier",
+  "procedures": [{
+    "scenario": "cle_ajoutee",
+    "outil": "autel_im508",
+    "accessoires": [],
+    "prerequis": ["Alimentation stabilisée branchée", "Vérifier la propriété du véhicule (carte grise / pièce d'identité)"],
+    "etapes": ["À compléter avec un retour terrain réel"],
+    "risques": ["À compléter"],
+    "duree_attente_min": null,
+    "version_logiciel": null,
+    "fiabilite": "a_verifier",
+    "source": null
+  }],
+  "notes_terrain": [
+    "À VÉRIFIER : annonce Autel 2024/2025 : lecture du PIN pour clés mécaniques à puce 4D, Elantra 2016-2017, compatible MaxiIM IM508/IM608 (peut nécessiter XP400/Pro + APB131, abonnement actif). Source unique : https://autel.us/autel-adds-24-25-immo-key/",
+    "À VÉRIFIER (source faible) : page de serrurier US citant une télécommande 315 MHz FCC ID PINHA-T008 pour une Elantra 2008, autre génération : https://ezkyz.com/sd/car-key/hyundai/elantra/2008/",
+    "Marché, puce, fréquence, lame et procédure : non renseignés."
+  ]
+}
